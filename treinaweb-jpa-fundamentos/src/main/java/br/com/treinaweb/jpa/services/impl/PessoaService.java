@@ -34,8 +34,18 @@ public class PessoaService implements CrudService<Pessoa, Integer> {
 
 	@Override
 	public Pessoa insert(Pessoa entity) {
-		// TODO Auto-generated method stub
-		return null;
+		EntityManager em = null;
+		try {
+			em = JpaUtils.getEntityManager();
+			em.getTransaction().begin();
+			em.persist(entity);
+			em.getTransaction().commit();
+			return entity;
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
 	}
 
 	@Override

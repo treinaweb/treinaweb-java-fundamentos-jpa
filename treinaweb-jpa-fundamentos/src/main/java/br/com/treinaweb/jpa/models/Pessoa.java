@@ -23,7 +23,7 @@ public class Pessoa {
 	private String sobrenome;
 
 	@Column(name = "PES_IDADE", nullable = false)
-	private String idade;
+	private int idade;
 
 	public int getId() {
 		return id;
@@ -49,12 +49,12 @@ public class Pessoa {
 		this.sobrenome = sobrenome;
 	}
 
-	public String getIdade() {
+	public int getIdade() {
 		return idade;
 	}
 
-	public void setIdade(String idade) {
-		this.idade = idade;
+	public void setIdade(int i) {
+		this.idade = i;
 	}
 
 }
