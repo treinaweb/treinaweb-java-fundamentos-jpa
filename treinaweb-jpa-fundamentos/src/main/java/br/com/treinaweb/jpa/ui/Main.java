@@ -9,11 +9,12 @@ import br.com.treinaweb.jpa.services.interfaces.CrudService;
 
 public class Main {
 
+	private static Scanner SCANNER = new Scanner(System.in);
+
 	public static void main(String[] args) {
 		listarPessoas();
 		int opcao = 0;
 		while (opcao != 6) {
-			Scanner scanner = new Scanner(System.in);
 			System.out.println("\n Escolha uma opção: ");
 			System.out.println("1. Listar pessoas");
 			System.out.println("2. Inserir pessoa");
@@ -22,13 +23,17 @@ public class Main {
 			System.out.println("5. Pesquisar pessoa por nome");
 			System.out.println("6. Sair");
 			System.out.print("\n Sua opção: ");
-			opcao = scanner.nextInt();
+			opcao = SCANNER.nextInt();
+			SCANNER.nextLine();
 			switch (opcao) {
 			case 1:
 				listarPessoas();
 				break;
 			case 2:
 				inserirPessoa();
+				break;
+			case 3:
+				atualizarPessoa();
 				break;
 			default:
 				System.out.println(" ** Opção inválida! **");
@@ -38,20 +43,45 @@ public class Main {
 		}
 	}
 
+	private static void atualizarPessoa() {
+		System.out.println("\n ** Atualização de pessoa **");
+		System.out.print("Digite o id da pessoa a ser atualizada: ");
+		int idPessoa = SCANNER.nextInt();
+		SCANNER.nextLine();
+		CrudService<Pessoa, Integer> pessoaService = new PessoaService();
+		Pessoa pessoaAtual = pessoaService.byId(idPessoa);
+		if (pessoaAtual != null) {
+			System.out.println("Pessoa encontrada: ");
+			System.out.println(String.format(" - Nome: %s", pessoaAtual.getNome()));
+			System.out.println(String.format(" - Sobrenome: %s", pessoaAtual.getSobrenome()));
+			System.out.println(String.format(" - Idade: %d", pessoaAtual.getIdade()));
+			System.out.print(" - Novo nome: ");
+			pessoaAtual.setNome(SCANNER.nextLine());
+			System.out.print(" - Novo sobrenome: ");
+			pessoaAtual.setSobrenome(SCANNER.nextLine());
+			System.out.print(" - Nova idade: ");
+			pessoaAtual.setIdade(SCANNER.nextInt());
+			pessoaService.update(pessoaAtual);
+			System.out.println("Pessoa atualizada com sucesso!");
+		} else {
+			System.out.println("Não existem pessoas com esse ID.");
+		}
+
+	}
+
 	private static void inserirPessoa() {
 		System.out.println("\n ** Inclusão de pessoa **");
-		try (Scanner scanner = new Scanner(System.in)) {
-			Pessoa novaPessoa = new Pessoa();
-			System.out.print("Nome: ");
-			novaPessoa.setNome(scanner.nextLine());
-			System.out.print("Sobrenome: ");
-			novaPessoa.setSobrenome(scanner.nextLine());
-			System.out.print("Idade: ");
-			novaPessoa.setIdade(scanner.nextInt());
-			CrudService<Pessoa, Integer> pessoaService = new PessoaService();
-			pessoaService.insert(novaPessoa);
-			System.out.println(" - Pessoa inserida com sucesso!");
-		}
+		Pessoa novaPessoa = new Pessoa();
+		System.out.print("Nome: ");
+		novaPessoa.setNome(SCANNER.nextLine());
+		System.out.print("Sobrenome: ");
+		novaPessoa.setSobrenome(SCANNER.nextLine());
+		System.out.print("Idade: ");
+		novaPessoa.setIdade(SCANNER.nextInt());
+		CrudService<Pessoa, Integer> pessoaService = new PessoaService();
+		pessoaService.insert(novaPessoa);
+		System.out.println(novaPessoa.getId());
+		System.out.println(" - Pessoa inserida com sucesso!");
 	}
 
 	private static void listarPessoas() {
