@@ -35,12 +35,25 @@ public class Main {
 			case 3:
 				atualizarPessoa();
 				break;
+			case 4:
+				deletarPessoa();
+				break;
 			default:
 				System.out.println(" ** Opção inválida! **");
 				break;
 			}
 
 		}
+	}
+
+	private static void deletarPessoa() {
+		System.out.println("\n ** Remoção de pessoa **");
+		System.out.print(" - Digite o ID da pessoa a ser removida: ");
+		int idPessoaASerRemovida = SCANNER.nextInt();
+		SCANNER.nextLine();
+		CrudService<Pessoa, Integer> pessoaService = new PessoaService();
+		pessoaService.deleteByKey(idPessoaASerRemovida);
+		System.out.println("Pessoa removida com sucesso!");
 	}
 
 	private static void atualizarPessoa() {

@@ -76,13 +76,35 @@ public class PessoaService implements CrudService<Pessoa, Integer> {
 
 	@Override
 	public void delete(Pessoa entity) {
-		// TODO Auto-generated method stub
-
+		EntityManager em = null;
+		try {
+			em = JpaUtils.getEntityManager();
+			em.getTransaction().begin();
+			em.remove(entity);
+			em.getTransaction().commit();
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
 	}
 
 	@Override
 	public void deleteByKey(Integer id) {
-		// TODO Auto-generated method stub
+		EntityManager em = null;
+		try {
+			em = JpaUtils.getEntityManager();
+			Pessoa pessoaASerDeletada = em.find(Pessoa.class, id);
+			if (pessoaASerDeletada != null) {
+				em.getTransaction().begin();
+				em.remove(pessoaASerDeletada);
+				em.getTransaction().commit();
+			}
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
 
 	}
 
